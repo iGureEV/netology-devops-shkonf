@@ -1,0 +1,12 @@
+---
+clickhouse_version: "24.8.4.13"
+clickhouse_packages:
+  - clickhouse-client
+  - clickhouse-server
+  - clickhouse-common-static
+vector_version: "0.57.0"
+vector_arch: "x86_64"
+vector_distr: "vector-{{ vector_version }}-{{ vector_arch }}-unknown-linux-gnu"
+vector_url: "https://github.com/vectordotdev/vector/releases/download/v{{ vector_version }}/{{ vector_distr }}.tar.gz"
+vector_dest: "/opt/vector"
+vector_config_dir: "/etc/vector"

@@ -1,0 +1,114 @@
+---
+- name: Install Clickhouse
+  hosts: clickhouse
+  handlers:
+    - name: Start clickhouse service
+      become: true
+      become_user: clickhouse
+      ansible.builtin.command: clickhouse-server --daemon
+      args:
+        creates: /var/run/clickhouse-server/clickhouse-server.pid
+  tasks:
+    - name: Get clickhouse packages
+      block:
+        - name: Get clickhouse distrib
+          ansible.builtin.get_url:
+            url: "https://packages.clickhouse.com/rpm/stable/{{ item }}-{{ clickhouse_version }}.x86_64.rpm"
+            dest: "./{{ item }}-{{ clickhouse_version }}.rpm"
+            mode: "0644"
+          with_items: "{{ clickhouse_packages }}"
+      rescue:
+        - name: Get clickhouse distrib (fallback)
+          ansible.builtin.get_url:
+            url: "https://packages.clickhouse.com/rpm/stable/clickhouse-common-static-{{ clickhouse_version }}.x86_64.rpm"
+            dest: "./clickhouse-common-static-{{ clickhouse_version }}.rpm"
+            mode: "0644"
+    - name: Install clickhouse packages
+      become: true
+      ansible.builtin.yum:
+        name:
+          - clickhouse-common-static-{{ clickhouse_version }}.rpm
+          - clickhouse-client-{{ clickhouse_version }}.rpm
+          - clickhouse-server-{{ clickhouse_version }}.rpm
+        disable_gpg_check: true
+      notify: Start clickhouse service
+    - name: Flush handlers
+      ansible.builtin.meta: flush_handlers
+    - name: Create database
+      ansible.builtin.command: "clickhouse-client -q 'create database logs;'"
+      register: create_db
+      failed_when: create_db.rc != 0 and create_db.rc != 82
+      changed_when: create_db.rc == 0
+
+- name: Install Vector
+  hosts: clickhouse
+  become: true
+  handlers:
+    - name: Restart vector service
+      ansible.builtin.shell: /usr/local/bin/vector --config {{ vector_config_dir }}/vector.yml &
+  tasks:
+    - name: Get vector distrib
+      ansible.builtin.get_url:
+        url: "{{ vector_url }}"
+        dest: "/tmp/{{ vector_distr }}.tar.gz"
+        mode: "0644"
+        timeout: 30
+        validate_certs: false
+
+    - name: Create vector directory
+      ansible.builtin.file:
+        path: "{{ vector_dest }}"
+        state: directory
+        mode: "0755"
+
+    - name: Extract vector archive
+      ansible.builtin.unarchive:
+        src: "/tmp/{{ vector_distr }}.tar.gz"
+        dest: "{{ vector_dest }}"
+        remote_src: true
+        extra_opts: ["--strip-components=1"]
+
+    - name: Find vector binary
+      ansible.builtin.shell:
+        cmd: "find {{ vector_dest }} -name 'vector' -type f | head -1"
+      register: vector_bin_path
+      changed_when: false
+
+    - name: Copy vector binary to /usr/local/bin
+      ansible.builtin.copy:
+        src: "{{ vector_bin_path.stdout }}"
+        dest: "/usr/local/bin/vector"
+        remote_src: true
+        mode: "0755"
+
+    - name: Create vector config directory
+      ansible.builtin.file:
+        path: "{{ vector_config_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Deploy vector config
+      ansible.builtin.template:
+        src: templates/vector.yml.j2
+        dest: "{{ vector_config_dir }}/vector.yml"
+        mode: "0644"
+      notify: Restart vector service
+
+    - name: Find vector systemd unit
+      ansible.builtin.shell:
+        cmd: "find {{ vector_dest }} -name 'vector.service' -type f | head -1"
+      register: vector_service_path
+      changed_when: false
+
+    - name: Deploy vector systemd unit
+      ansible.builtin.copy:
+        src: "{{ vector_service_path.stdout }}"
+        dest: "/etc/systemd/system/vector.service"
+        remote_src: true
+        mode: "0644"
+
+    - name: Start vector service
+      ansible.builtin.shell: /usr/local/bin/vector --config {{ vector_config_dir }}/vector.yml &
+      async: 10
+      poll: 0
+      changed_when: false

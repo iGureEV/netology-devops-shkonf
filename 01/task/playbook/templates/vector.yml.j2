@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+sources:
+  internal_metrics:
+    type: "internal_metrics"
+
+sinks:
+  stdout:
+    type: "console"
+    inputs:
+      - internal_metrics
+    encoding:
+      codec: "json"

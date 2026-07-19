@@ -1,0 +1,235 @@
+- name: Create Yandex Cloud infrastructure
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tags:
+    - infrastructure
+
+  tasks:
+    - name: Create VPC network
+      ansible.builtin.shell:
+        cmd: |
+          yc vpc network create \
+            --name my-network \
+            --folder-id "{{ folder_id }}"
+      register: network
+      changed_when: network.rc == 0
+
+    - name: Get network ID
+      ansible.builtin.shell:
+        cmd: |
+          yc vpc network get \
+            --name my-network \
+            --folder-id "{{ folder_id }}" \
+            --format json
+      register: network_info
+      changed_when: false
+
+    - name: Set network_id fact
+      ansible.builtin.set_fact:
+        network_id: "{{ (network_info.stdout | from_json).id }}"
+
+    - name: Create VPC subnet
+      ansible.builtin.shell:
+        cmd: |
+          yc vpc subnet create \
+            --name my-subnet \
+            --folder-id "{{ folder_id }}" \
+            --zone "{{ zone }}" \
+            --network-id "{{ network_id }}" \
+            --range 10.128.0.0/24
+      register: subnet
+      changed_when: subnet.rc == 0
+
+    - name: Get subnet ID
+      ansible.builtin.shell:
+        cmd: |
+          yc vpc subnet get \
+            --name my-subnet \
+            --folder-id "{{ folder_id }}" \
+            --format json
+      register: subnet_info
+      changed_when: false
+
+    - name: Set subnet_id fact
+      ansible.builtin.set_fact:
+        subnet_id: "{{ (subnet_info.stdout | from_json).id }}"
+
+    - name: Create ClickHouse VM
+      ycc_vm:
+        auth:
+          iam_token: "{{ iam_token }}"
+        name: clickhouse
+        folder_id: "{{ folder_id }}"
+        zone_id: "{{ zone }}"
+        platform_id: "Intel Cascade Lake"
+        cores: 2
+        memory: 4
+        core_fraction: 20
+        image_family: "{{ ubuntu_image_family }}"
+        image_folder:
+          - standard-images
+        disk_size: 20
+        disk_type: ssd
+        subnet_id: "{{ subnet_id }}"
+        assign_public_ip: true
+        login: ubuntu
+        public_ssh_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        state: present
+
+    - name: Create Vector VM
+      ycc_vm:
+        auth:
+          iam_token: "{{ iam_token }}"
+        name: vector
+        folder_id: "{{ folder_id }}"
+        zone_id: "{{ zone }}"
+        platform_id: "Intel Cascade Lake"
+        cores: 2
+        memory: 4
+        core_fraction: 20
+        image_family: "{{ ubuntu_image_family }}"
+        image_folder:
+          - standard-images
+        disk_size: 20
+        disk_type: ssd
+        subnet_id: "{{ subnet_id }}"
+        assign_public_ip: true
+        login: ubuntu
+        public_ssh_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        state: present
+
+    - name: Create Lighthouse VM
+      ycc_vm:
+        auth:
+          iam_token: "{{ iam_token }}"
+        name: lighthouse
+        folder_id: "{{ folder_id }}"
+        zone_id: "{{ zone }}"
+        platform_id: "Intel Cascade Lake"
+        cores: 2
+        memory: 4
+        core_fraction: 20
+        image_family: "{{ ubuntu_image_family }}"
+        image_folder:
+          - standard-images
+        disk_size: 20
+        disk_type: ssd
+        subnet_id: "{{ subnet_id }}"
+        assign_public_ip: true
+        login: ubuntu
+        public_ssh_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        state: present
+
+- name: Install Clickhouse
+  hosts: clickhouse
+  become: true
+
+  handlers:
+    - name: Start clickhouse service
+      ansible.builtin.service:
+        name: clickhouse-server
+        state: restarted
+
+  tasks:
+    - name: Get clickhouse distrib
+      ansible.builtin.get_url:
+        url: "https://packages.clickhouse.com/deb/pool/main/c/clickhouse/{{ item }}_{{ clickhouse_version }}_amd64.deb"
+        dest: "./{{ item }}_{{ clickhouse_version }}_amd64.deb"
+      with_items: "{{ clickhouse_packages }}"
+
+    - name: Install clickhouse packages
+      ansible.builtin.apt:
+        deb: "./{{ item }}_{{ clickhouse_version }}_amd64.deb"
+      with_items: "{{ clickhouse_packages }}"
+      notify: Start clickhouse service
+
+    - name: Flush handlers
+      ansible.builtin.meta: flush_handlers
+
+    - name: Create database
+      ansible.builtin.command:
+        cmd: clickhouse-client -q "create database logs;"
+      register: create_db
+      failed_when: create_db.rc != 0 and create_db.rc != 82
+      changed_when: create_db.rc == 0
+
+- name: Install Vector
+  hosts: vector
+  become: true
+
+  tasks:
+    - name: Install Vector
+      ansible.builtin.apt:
+        deb: "https://packages.timber.io/vector/0.34.1/vector_0.34.1-1_amd64.deb"
+        state: present
+
+    - name: Start Vector service
+      ansible.builtin.service:
+        name: vector
+        state: started
+        enabled: true
+
+- name: Install Lighthouse
+  hosts: lighthouse
+  become: true
+
+  tasks:
+    - name: Install dependencies (unzip, nginx)
+      ansible.builtin.apt:
+        name:
+          - unzip
+          - nginx
+        state: present
+        update_cache: true
+
+    - name: Download Lighthouse archive
+      ansible.builtin.get_url:
+        url: https://github.com/VKCOM/lighthouse/archive/refs/heads/master.zip
+        dest: /tmp/lighthouse.zip
+        mode: "0644"
+
+    - name: Create Lighthouse directory
+      ansible.builtin.file:
+        path: /var/www/lighthouse
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: "0755"
+
+    - name: Unzip Lighthouse into target directory
+      ansible.builtin.shell:
+        cmd: |
+          if [ ! -f /var/www/lighthouse/index.html ]; then
+            unzip -o /tmp/lighthouse.zip -d /tmp/lighthouse-tmp
+            cp -r /tmp/lighthouse-tmp/lighthouse-master/* /var/www/lighthouse/
+            rm -rf /tmp/lighthouse-tmp
+          fi
+        creates: /var/www/lighthouse/index.html
+      notify: Restart nginx
+
+    - name: Copy Nginx config from template
+      ansible.builtin.template:
+        src: lighthouse.conf.j2
+        dest: /etc/nginx/sites-available/lighthouse.conf
+        mode: "0644"
+      notify: Restart nginx
+
+    - name: Enable Lighthouse site
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/lighthouse.conf
+        dest: /etc/nginx/sites-enabled/lighthouse.conf
+        state: link
+      notify: Restart nginx
+
+    - name: Remove default Nginx site
+      ansible.builtin.file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: Restart nginx
+
+  handlers:
+    - name: Restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded

@@ -1,5 +1,5 @@
 folder_id: "b1g7q2a6j9is3l14uqbo"
-iam_token: "{{ lookup('env', 'YC_IAM_TOKEN') | default('YOUR_IAM_TOKEN_HERE', true) }}"
+iam_token: "{{ lookup('env', 'YC_IAM_TOKEN') }}"
 zone: ru-central1-e
 ubuntu_image_family: ubuntu-2404-lts
 clickhouse_version: "26.3.17.4"

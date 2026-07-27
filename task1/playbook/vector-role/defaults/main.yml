@@ -1,0 +1,7 @@
+---
+# defaults file for vector-role
+# defaults/main.yml — переменные по умолчанию
+vector_version: "0.34.1"
+vector_arch: "amd64"
+vector_deb_url: "https://packages.timber.io/vector/{{ vector_version }}/vector_{{ vector_version }}-1_{{ vector_arch }}.deb"
+

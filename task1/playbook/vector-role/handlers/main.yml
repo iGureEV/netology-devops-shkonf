@@ -1,0 +1,3 @@
+---
+# handlers file for vector-role
+# handlers не требуются - сервис управляется через service

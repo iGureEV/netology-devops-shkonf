@@ -1,0 +1,55 @@
+---
+# tasks file for lighthouse-role
+
+- name: Install dependencies (unzip, nginx)
+  ansible.builtin.apt:
+    name:
+      - unzip
+      - nginx
+    state: present
+    update_cache: true
+
+- name: Download Lighthouse archive
+  ansible.builtin.get_url:
+    url: "{{ lighthouse_url }}"
+    dest: /tmp/lighthouse.zip
+    mode: "0644"
+
+- name: Create Lighthouse directory
+  ansible.builtin.file:
+    path: "{{ lighthouse_dest }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: "0755"
+
+- name: Unzip Lighthouse into target directory
+  ansible.builtin.shell:
+    cmd: |
+      if [ ! -f {{ lighthouse_dest }}/index.html ]; then
+        unzip -o /tmp/lighthouse.zip -d /tmp/lighthouse-tmp
+        cp -r /tmp/lighthouse-tmp/lighthouse-master/* {{ lighthouse_dest }}/
+        rm -rf /tmp/lighthouse-tmp
+      fi
+    creates: "{{ lighthouse_dest }}/index.html"
+  notify: Restart nginx
+
+- name: Copy Nginx config from template
+  ansible.builtin.template:
+    src: lighthouse.conf.j2
+    dest: /etc/nginx/sites-available/lighthouse.conf
+    mode: "0644"
+  notify: Restart nginx
+
+- name: Enable Lighthouse site
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/lighthouse.conf
+    dest: /etc/nginx/sites-enabled/lighthouse.conf
+    state: link
+  notify: Restart nginx
+
+- name: Remove default Nginx site
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: Restart nginx

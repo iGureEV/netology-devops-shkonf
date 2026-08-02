@@ -1,0 +1,15 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Check Vector version
+      ansible.builtin.command: vector --version
+      register: result
+      changed_when: false
+      failed_when: result.rc != 0
+
+    - name: Print version
+      ansible.builtin.debug:
+        msg: "Vector version: {{ result.stdout }}"
+

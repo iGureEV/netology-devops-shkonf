@@ -1,0 +1,535 @@
+(venv) ➜  vector-role git:(task3) ✗ molecule test -s compatibility
+WARNING  Driver podman does not provide a schema.
+WARNING  Driver docker does not provide a schema.
+INFO     compatibility ➜ discovery: scenario test matrix: destroy, syntax, create, converge, verify, destroy
+INFO     compatibility ➜ prerun: Performing prerun with role_name_check=0...
+INFO     compatibility ➜ destroy: Executing
+INFO     Sanity checks: 'podman'
+  ┌──────────────────────────────────────────────────────────────────────────────────
+  │ ansible-playbook --inventory /home/geolook/.ansible/tmp/molecule.9bzX.compatibility/inventory
+  │   --skip-tags molecule-notest,notest
+  │   /home/geolook/netology/homeworks/task3/venv/lib/python3.12/site-packages/molecule_podman/playbooks/destroy.yml
+  │ 
+  │ Using /home/geolook/.ansible/tmp/molecule.9bzX.compatibility/ansible.cfg as config file
+  │ 
+  │ PLAY [Destroy] *****************************************************************
+  │ 
+  │ TASK [Set async_dir for HOME env] **********************************************
+  │ ok: [localhost] => {"ansible_facts": {"ansible_async_dir": "/home/geolook/.ansible_async/"}, "changed": false}
+  │ 
+  │ TASK [Destroy molecule instance(s)] ********************************************
+  │ changed: [localhost] => (item={'image': 'ubuntu:latest', 'name': 'instance', 'pre_build_image': True}) => {"ansible_job_id":
+  │   "j594447760409.884316", "ansible_loop_var": "item", "changed": true, "changed_when_result": true, "finished": false, "item": {"image":
+  │   "ubuntu:latest", "name": "instance", "pre_build_image": true}, "results_file": "/home/geolook/.ansible_async/j594447760409.884316",
+  │   "started": true}
+  │ 
+  │ TASK [Wait for instance(s) deletion to complete] *******************************
+  │ changed: [localhost] => (item={'changed': True, 'failed': False, 'finished': False, 'ansible_job_id': 'j594447760409.884316',
+  │   'changed_when_result': True, 'ansible_loop_var': 'item', 'item': {'image': 'ubuntu:latest', 'name': 'instance', 'pre_build_image': True},
+  │   'started': True, 'results_file': '/home/geolook/.ansible_async/j594447760409.884316'}) => {"ansible_job_id": "j594447760409.884316",
+  │   "ansible_loop_var": "item", "attempts": 1, "changed": true, "cmd": "podman container exists instance && podman rm -f instance || true",
+  │   "delta": "0:00:00.030867", "end": "2026-08-03 00:38:30.685738", "finished": true, "item": {"ansible_job_id": "j594447760409.884316",
+  │   "ansible_loop_var": "item", "changed": true, "changed_when_result": true, "failed": false, "finished": false, "item": {"image":
+  │   "ubuntu:latest", "name": "instance", "pre_build_image": true}, "results_file": "/home/geolook/.ansible_async/j594447760409.884316",
+  │   "started": true}, "msg": "", "rc": 0, "results_file": "/home/geolook/.ansible_async/j594447760409.884316", "start": "2026-08-03
+  │   00:38:30.654871", "started": true, "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+  │ 
+  │ PLAY RECAP *********************************************************************
+  │ localhost                  : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+  │ 
+  └─ Return code: 0 ─────────────────────────────────────────────────────────────────
+INFO     compatibility ➜ destroy: Executed: Successful
+INFO     compatibility ➜ syntax: Executing
+  ┌──────────────────────────────────────────────────────────────────────────────────
+  │ ansible-playbook --inventory /home/geolook/.ansible/tmp/molecule.9bzX.compatibility/inventory
+  │   --skip-tags molecule-notest,notest
+  │   --syntax-check /home/geolook/netology/homeworks/task3/vector-role/molecule/compatibility/converge.yml
+  │ 
+  │ Using /home/geolook/.ansible/tmp/molecule.9bzX.compatibility/ansible.cfg as config file
+  │ 
+  │ playbook: /home/geolook/netology/homeworks/task3/vector-role/molecule/compatibility/converge.yml
+  └─ Return code: 0 ─────────────────────────────────────────────────────────────────
+INFO     compatibility ➜ syntax: Executed: Successful
+INFO     compatibility ➜ create: Executing
+  ┌──────────────────────────────────────────────────────────────────────────────────
+  │ ansible-playbook --inventory /home/geolook/.ansible/tmp/molecule.9bzX.compatibility/inventory
+  │   --skip-tags molecule-notest,notest
+  │   /home/geolook/netology/homeworks/task3/venv/lib/python3.12/site-packages/molecule_podman/playbooks/create.yml
+  │ 
+  │ Using /home/geolook/.ansible/tmp/molecule.9bzX.compatibility/ansible.cfg as config file
+  │ 
+  │ PLAY [Create] ******************************************************************
+  │ 
+  │ TASK [get podman executable path] **********************************************
+  │ ok: [localhost] => {"changed": false, "changed_when_result": false, "cmd": ["which", "podman"], "delta": "0:00:00.003672", "end":
+  │   "2026-08-03 00:38:32.653241", "msg": "", "rc": 0, "start": "2026-08-03 00:38:32.649569", "stderr": "", "stderr_lines": [], "stdout":
+  │   "/usr/bin/podman", "stdout_lines": ["/usr/bin/podman"]}
+  │ 
+  │ TASK [save path to executable as fact] *****************************************
+  │ ok: [localhost] => {"ansible_facts": {"podman_cmd": "/usr/bin/podman"}, "changed": false}
+  │ 
+  │ TASK [Set async_dir for HOME env] **********************************************
+  │ ok: [localhost] => {"ansible_facts": {"ansible_async_dir": "/home/geolook/.ansible_async/"}, "changed": false}
+  │ 
+  │ TASK [Log into a container registry] *******************************************
+  │ skipping: [localhost] => (item=None)  => {"censored": "the output has been hidden due to the fact that 'no_log: true' was specified for
+  │   this result", "changed": false}
+  │ skipping: [localhost] => {"censored": "the output has been hidden due to the fact that 'no_log: true' was specified for this result",
+  │   "changed": false}
+  │ 
+  │ TASK [Check presence of custom Dockerfiles] ************************************
+  │ ok: [localhost] => (item=Dockerfile: None specified) => {"ansible_loop_var": "item", "changed": false, "item": {"image": "ubuntu:latest",
+  │   "name": "instance", "pre_build_image": true}, "stat": {"exists": false}}
+  │ 
+  │ TASK [Create Dockerfiles from image names] *************************************
+  │ skipping: [localhost] => (item=None)  => {"censored": "the output has been hidden due to the fact that 'no_log: true' was specified for
+  │   this result", "changed": false}
+  │ skipping: [localhost] => {"censored": "the output has been hidden due to the fact that 'no_log: true' was specified for this result",
+  │   "changed": false}
+  │ 
+  │ TASK [Discover local Podman images] ********************************************
+  │ ok: [localhost] => (item=instance) => {"ansible_loop_var": "item", "changed": false, "images": [], "item": {"ansible_index_var": "i",
+  │   "ansible_loop_var": "item", "changed": false, "failed": false, "false_condition": "not item.pre_build_image | default(false)", "i": 0,
+  │   "item": {"image": "ubuntu:latest", "name": "instance", "pre_build_image": true}, "skip_reason": "Conditional result was False",
+  │   "skipped": true}}
+  │ 
+  │ TASK [Build an Ansible compatible image] ***************************************
+  │ skipping: [localhost] => (item=ubuntu:latest)  => {"ansible_loop_var": "item", "changed": false, "false_condition": "not
+  │   item.item.pre_build_image | default(false)", "item": {"ansible_index_var": "i", "ansible_loop_var": "item", "changed": false, "failed":
+  │   false, "false_condition": "not item.pre_build_image | default(false)", "i": 0, "item": {"image": "ubuntu:latest", "name": "instance",
+  │   "pre_build_image": true}, "skip_reason": "Conditional result was False", "skipped": true}, "skip_reason": "Conditional result was False"}
+  │ skipping: [localhost] => {"changed": false, "msg": "All items skipped"}
+  │ 
+  │ TASK [Determine the CMD directives] ********************************************
+  │ ok: [localhost] => (item="instance command: None specified") => {"ansible_facts": {"command_directives_dict": {"instance": "bash -c \"while
+  │   true; do sleep 10000; done\""}}, "ansible_loop_var": "item", "changed": false, "item": {"image": "ubuntu:latest", "name": "instance",
+  │   "pre_build_image": true}}
+  │ 
+  │ TASK [Remove possible pre-existing containers] *********************************
+  │ changed: [localhost] => {"changed": true, "changed_when_result": true, "cmd": ["/usr/bin/podman", "rm", "-f", "-i", "-v", "instance"],
+  │   "delta": "0:00:00.030535", "end": "2026-08-03 00:38:33.773520", "failed_when_result": false, "msg": "", "rc": 0, "start": "2026-08-03
+  │   00:38:33.742985", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+  │ 
+  │ TASK [Discover local podman networks] ******************************************
+  │ skipping: [localhost] => (item=None)  => {"censored": "the output has been hidden due to the fact that 'no_log: true' was specified for
+  │   this result", "changed": false}
+  │ skipping: [localhost] => {"censored": "the output has been hidden due to the fact that 'no_log: true' was specified for this result",
+  │   "changed": false}
+  │ 
+  │ TASK [Create podman network dedicated to this scenario] ************************
+  │ skipping: [localhost] => {"censored": "the output has been hidden due to the fact that 'no_log: true' was specified for this result",
+  │   "changed": false}
+  │ 
+  │ TASK [Create molecule instance(s)] *********************************************
+  │ changed: [localhost] => (item=instance) => {"ansible_job_id": "j983056589373.884579", "ansible_loop_var": "item", "changed": true,
+  │   "changed_when_result": true, "finished": false, "item": {"image": "ubuntu:latest", "name": "instance", "pre_build_image": true},
+  │   "results_file": "/home/geolook/.ansible_async/j983056589373.884579", "started": true}
+  │ 
+  │ TASK [Wait for instance(s) creation to complete] *******************************
+  │ FAILED - RETRYING: [localhost]: Wait for instance(s) creation to complete (299 retries left).
+  │ changed: [localhost] => (item=instance) => {"ansible_job_id": "j983056589373.884579", "ansible_loop_var": "item", "attempts": 2, "changed":
+  │   true, "cmd": ["/usr/bin/podman", "run", "-d", "--name", "instance", "--hostname=instance", "ubuntu:latest", "bash", "-c", "while true; do
+  │   sleep 10000; done"], "delta": "0:00:00.227231", "end": "2026-08-03 00:38:34.557119", "finished": true, "item": {"ansible_job_id":
+  │   "j983056589373.884579", "ansible_loop_var": "item", "changed": true, "changed_when_result": true, "failed": false, "finished": false,
+  │   "item": {"image": "ubuntu:latest", "name": "instance", "pre_build_image": true}, "results_file":
+  │   "/home/geolook/.ansible_async/j983056589373.884579", "started": true}, "msg": "", "rc": 0, "results_file":
+  │   "/home/geolook/.ansible_async/j983056589373.884579", "start": "2026-08-03 00:38:34.329888", "started": true, "stderr": "",
+  │   "stderr_lines": [], "stdout": "60f2e6e1911c8b56c4a8ae0e163d5541a6430adcbf156fa7bf0014a17e89ed86", "stdout_lines":
+  │   ["60f2e6e1911c8b56c4a8ae0e163d5541a6430adcbf156fa7bf0014a17e89ed86"]}
+  │ 
+  │ PLAY RECAP *********************************************************************
+  │ localhost                  : ok=9    changed=3    unreachable=0    failed=0    skipped=5    rescued=0    ignored=0
+  │ 
+  └─ Return code: 0 ─────────────────────────────────────────────────────────────────
+INFO     compatibility ➜ create: Executed: Successful
+INFO     compatibility ➜ converge: Executing
+  ┌──────────────────────────────────────────────────────────────────────────────────
+  │ ansible-playbook --inventory /home/geolook/.ansible/tmp/molecule.9bzX.compatibility/inventory
+  │   --skip-tags molecule-notest,notest
+  │   /home/geolook/netology/homeworks/task3/vector-role/molecule/compatibility/converge.yml
+  │ 
+  │ Using /home/geolook/.ansible/tmp/molecule.9bzX.compatibility/ansible.cfg as config file
+  │ 
+  │ PLAY [Converge] ****************************************************************
+  │ 
+  │ TASK [Update apt cache] ********************************************************
+  │ ok: [instance] => {"changed": false, "changed_when_result": false, "rc": 0, "stderr": "", "stderr_lines": [], "stdout": "Get:1
+  │   http://security.ubuntu.com/ubuntu resolute-security InRelease [137 kB]\nGet:2 http://archive.ubuntu.com/ubuntu resolute InRelease [136
+  │   kB]\nGet:3 http://security.ubuntu.com/ubuntu resolute-security/main amd64 Packages [419 kB]\nGet:4 http://security.ubuntu.com/ubuntu
+  │   resolute-security/multiverse amd64 Packages [11.2 kB]\nGet:5 http://security.ubuntu.com/ubuntu resolute-security/restricted amd64
+  │   Packages [355 kB]\nGet:6 http://security.ubuntu.com/ubuntu resolute-security/universe amd64 Packages [185 kB]\nGet:7
+  │   http://archive.ubuntu.com/ubuntu resolute-updates InRelease [137 kB]\nGet:8 http://archive.ubuntu.com/ubuntu resolute-backports InRelease
+  │   [136 kB]\nGet:9 http://archive.ubuntu.com/ubuntu resolute/restricted amd64 Packages [189 kB]\nGet:10 http://archive.ubuntu.com/ubuntu
+  │   resolute/universe amd64 Packages [20.1 MB]\nGet:11 http://archive.ubuntu.com/ubuntu resolute/multiverse amd64 Packages [352 kB]\nGet:12
+  │   http://archive.ubuntu.com/ubuntu resolute/main amd64 Packages [1874 kB]\nGet:13 http://archive.ubuntu.com/ubuntu resolute-updates/main
+  │   amd64 Packages [497 kB]\nGet:14 http://archive.ubuntu.com/ubuntu resolute-updates/universe amd64 Packages [280 kB]\nGet:15
+  │   http://archive.ubuntu.com/ubuntu resolute-updates/restricted amd64 Packages [368 kB]\nGet:16 http://archive.ubuntu.com/ubuntu
+  │   resolute-updates/multiverse amd64 Packages [13.4 kB]\nGet:17 http://archive.ubuntu.com/ubuntu resolute-backports/universe amd64 Packages
+  │   [567 B]\nFetched 25.2 MB in 3s (9615 kB/s)\nReading package lists...\n", "stdout_lines": ["Get:1 http://security.ubuntu.com/ubuntu
+  │   resolute-security InRelease [137 kB]", "Get:2 http://archive.ubuntu.com/ubuntu resolute InRelease [136 kB]", "Get:3
+  │   http://security.ubuntu.com/ubuntu resolute-security/main amd64 Packages [419 kB]", "Get:4 http://security.ubuntu.com/ubuntu
+  │   resolute-security/multiverse amd64 Packages [11.2 kB]", "Get:5 http://security.ubuntu.com/ubuntu resolute-security/restricted amd64
+  │   Packages [355 kB]", "Get:6 http://security.ubuntu.com/ubuntu resolute-security/universe amd64 Packages [185 kB]", "Get:7
+  │   http://archive.ubuntu.com/ubuntu resolute-updates InRelease [137 kB]", "Get:8 http://archive.ubuntu.com/ubuntu resolute-backports
+  │   InRelease [136 kB]", "Get:9 http://archive.ubuntu.com/ubuntu resolute/restricted amd64 Packages [189 kB]", "Get:10
+  │   http://archive.ubuntu.com/ubuntu resolute/universe amd64 Packages [20.1 MB]", "Get:11 http://archive.ubuntu.com/ubuntu
+  │   resolute/multiverse amd64 Packages [352 kB]", "Get:12 http://archive.ubuntu.com/ubuntu resolute/main amd64 Packages [1874 kB]", "Get:13
+  │   http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 Packages [497 kB]", "Get:14 http://archive.ubuntu.com/ubuntu
+  │   resolute-updates/universe amd64 Packages [280 kB]", "Get:15 http://archive.ubuntu.com/ubuntu resolute-updates/restricted amd64 Packages
+  │   [368 kB]", "Get:16 http://archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64 Packages [13.4 kB]", "Get:17
+  │   http://archive.ubuntu.com/ubuntu resolute-backports/universe amd64 Packages [567 B]", "Fetched 25.2 MB in 3s (9615 kB/s)", "Reading
+  │   package lists..."]}
+  │ 
+  │ TASK [Install python3] *********************************************************
+  │ ok: [instance] => {"changed": false, "changed_when_result": false, "rc": 0, "stderr": "debconf: unable to initialize frontend:
+  │   Dialog\ndebconf: (TERM is not set, so the dialog frontend is not usable.)\ndebconf: falling back to frontend: Readline\ndebconf: unable
+  │   to initialize frontend: Readline\ndebconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module)
+  │   (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1
+  │   /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40
+  │   /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8, <STDIN> line 21.)\ndebconf:
+  │   falling back to frontend: Teletype\ndebconf: unable to initialize frontend: Teletype\ndebconf: (This frontend requires a controlling
+  │   tty.)\ndebconf: falling back to frontend: Noninteractive\n", "stderr_lines": ["debconf: unable to initialize frontend: Dialog", "debconf:
+  │   (TERM is not set, so the dialog frontend is not usable.)", "debconf: falling back to frontend: Readline", "debconf: unable to initialize
+  │   frontend: Readline", "debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries
+  │   checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40
+  │   /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl)
+  │   at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8, <STDIN> line 21.)", "debconf: falling back to frontend: Teletype", "debconf:
+  │   unable to initialize frontend: Teletype", "debconf: (This frontend requires a controlling tty.)", "debconf: falling back to frontend:
+  │   Noninteractive"], "stdout": "Reading package lists...\nBuilding dependency tree...\nReading state information...\nSolving
+  │   dependencies...\nThe following additional packages will be installed:\n  ca-certificates libapparmor1 libexpat1 libffi8
+  │   libpython3-stdlib\n  libpython3.14-minimal libpython3.14-stdlib libreadline8t64 libsqlite3-0\n  media-types netbase openssl
+  │   python3-minimal python3.14 python3.14-minimal\n  readline-common sudo-common sudo-rs tzdata\nSuggested packages:\n  python3-doc
+  │   python3-tk python3-venv python3.14-venv python3.14-doc binutils\n  binfmt-support readline-doc\nThe following NEW packages will be
+  │   installed:\n  ca-certificates libapparmor1 libexpat1 libffi8 libpython3-stdlib\n  libpython3.14-minimal libpython3.14-stdlib
+  │   libreadline8t64 libsqlite3-0\n  media-types netbase openssl python3 python3-minimal python3.14\n  python3.14-minimal readline-common sudo
+  │   sudo-common sudo-rs tzdata\n0 upgraded, 21 newly installed, 0 to remove and 10 not upgraded.\nNeed to get 11.1 MB of archives.\nAfter
+  │   this operation, 38.5 MB of additional disk space will be used.\nGet:1 http://archive.ubuntu.com/ubuntu resolute/main amd64 libexpat1
+  │   amd64 2.7.4-1 [94.0 kB]\nGet:2 http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 libpython3.14-minimal amd64 3.14.4-1ubuntu0.1
+  │   [916 kB]\nGet:3 http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 python3.14-minimal amd64 3.14.4-1ubuntu0.1 [2580 kB]\nGet:4
+  │   http://archive.ubuntu.com/ubuntu resolute/main amd64 python3-minimal amd64 3.14.3-0ubuntu2 [25.8 kB]\nGet:5
+  │   http://archive.ubuntu.com/ubuntu resolute/main amd64 media-types all 14.0.0build1 [31.4 kB]\nGet:6 http://archive.ubuntu.com/ubuntu
+  │   resolute/main amd64 netbase all 6.5build1 [13.0 kB]\nGet:7 http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 tzdata all
+  │   2026c-0ubuntu0.26.04.1 [193 kB]\nGet:8 http://archive.ubuntu.com/ubuntu resolute/main amd64 libffi8 amd64 3.5.2-4 [26.3 kB]\nGet:9
+  │   http://archive.ubuntu.com/ubuntu resolute/main amd64 readline-common all 8.3-4 [61.5 kB]\nGet:10 http://archive.ubuntu.com/ubuntu
+  │   resolute/main amd64 libreadline8t64 amd64 8.3-4 [164 kB]\nGet:11 http://archive.ubuntu.com/ubuntu resolute-updates/main amd64
+  │   libsqlite3-0 amd64 3.46.1-9ubuntu0.2 [719 kB]\nGet:12 http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 libpython3.14-stdlib
+  │   amd64 3.14.4-1ubuntu0.1 [2414 kB]\nGet:13 http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 python3.14 amd64 3.14.4-1ubuntu0.1
+  │   [830 kB]\nGet:14 http://archive.ubuntu.com/ubuntu resolute/main amd64 libpython3-stdlib amd64 3.14.3-0ubuntu2 [8476 B]\nGet:15
+  │   http://archive.ubuntu.com/ubuntu resolute/main amd64 python3 amd64 3.14.3-0ubuntu2 [22.9 kB]\nGet:16 http://archive.ubuntu.com/ubuntu
+  │   resolute/main amd64 sudo-common all 1.2ubuntu [4034 B]\nGet:17 http://archive.ubuntu.com/ubuntu resolute/main amd64 libapparmor1 amd64
+  │   5.0.0~beta1-0ubuntu7 [50.5 kB]\nGet:18 http://archive.ubuntu.com/ubuntu resolute/main amd64 sudo amd64 1.9.17p2-1ubuntu3 [954 kB]\nGet:19
+  │   http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 openssl amd64 3.5.5-1ubuntu3.3 [1243 kB]\nGet:20
+  │   http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 ca-certificates all 20260601~26.04.1 [139 kB]\nGet:21
+  │   http://archive.ubuntu.com/ubuntu resolute/main amd64 sudo-rs amd64 0.2.13-0ubuntu1 [592 kB]\nPreconfiguring packages ...\nFetched 11.1 MB
+  │   in 1s (9992 kB/s)\nSelecting previously unselected package libexpat1:amd64.\r\n(Reading database ... \r(Reading database ... 5%\r(Reading
+  │   database ... 10%\r(Reading database ... 15%\r(Reading database ... 20%\r(Reading database ... 25%\r(Reading database ... 30%\r(Reading
+  │   database ... 35%\r(Reading database ... 40%\r(Reading database ... 45%\r(Reading database ... 50%\r(Reading database ... 55%\r(Reading
+  │   database ... 60%\r(Reading database ... 65%\r(Reading database ... 70%\r(Reading database ... 75%\r(Reading database ... 80%\r(Reading
+  │   database ... 85%\r(Reading database ... 90%\r(Reading database ... 95%\r(Reading database ... 100%\r(Reading database ... 7724 files and
+  │   directories currently installed.)\r\nPreparing to unpack .../libexpat1_2.7.4-1_amd64.deb ...\r\nUnpacking libexpat1:amd64 (2.7.4-1)
+  │   ...\r\nSelecting previously unselected package libpython3.14-minimal:amd64.\r\nPreparing to unpack
+  │   .../libpython3.14-minimal_3.14.4-1ubuntu0.1_amd64.deb ...\r\nUnpacking libpython3.14-minimal:amd64 (3.14.4-1ubuntu0.1) ...\r\nSelecting
+  │   previously unselected package python3.14-minimal.\r\nPreparing to unpack .../python3.14-minimal_3.14.4-1ubuntu0.1_amd64.deb
+  │   ...\r\nUnpacking python3.14-minimal (3.14.4-1ubuntu0.1) ...\r\nSetting up libpython3.14-minimal:amd64 (3.14.4-1ubuntu0.1) ...\r\nSetting
+  │   up libexpat1:amd64 (2.7.4-1) ...\r\nSetting up python3.14-minimal (3.14.4-1ubuntu0.1) ...\r\nSelecting previously unselected package
+  │   python3-minimal.\r\n(Reading database ... \r(Reading database ... 5%\r(Reading database ... 10%\r(Reading database ... 15%\r(Reading
+  │   database ... 20%\r(Reading database ... 25%\r(Reading database ... 30%\r(Reading database ... 35%\r(Reading database ... 40%\r(Reading
+  │   database ... 45%\r(Reading database ... 50%\r(Reading database ... 55%\r(Reading database ... 60%\r(Reading database ... 65%\r(Reading
+  │   database ... 70%\r(Reading database ... 75%\r(Reading database ... 80%\r(Reading database ... 85%\r(Reading database ... 90%\r(Reading
+  │   database ... 95%\r(Reading database ... 100%\r(Reading database ... 8078 files and directories currently installed.)\r\nPreparing to
+  │   unpack .../00-python3-minimal_3.14.3-0ubuntu2_amd64.deb ...\r\nUnpacking python3-minimal (3.14.3-0ubuntu2) ...\r\nSelecting previously
+  │   unselected package media-types.\r\nPreparing to unpack .../01-media-types_14.0.0build1_all.deb ...\r\nUnpacking media-types
+  │   (14.0.0build1) ...\r\nSelecting previously unselected package netbase.\r\nPreparing to unpack .../02-netbase_6.5build1_all.deb
+  │   ...\r\nUnpacking netbase (6.5build1) ...\r\nSelecting previously unselected package tzdata.\r\nPreparing to unpack
+  │   .../03-tzdata_2026c-0ubuntu0.26.04.1_all.deb ...\r\nUnpacking tzdata (2026c-0ubuntu0.26.04.1) ...\r\nSelecting previously unselected
+  │   package libffi8:amd64.\r\nPreparing to unpack .../04-libffi8_3.5.2-4_amd64.deb ...\r\nUnpacking libffi8:amd64 (3.5.2-4) ...\r\nSelecting
+  │   previously unselected package readline-common.\r\nPreparing to unpack .../05-readline-common_8.3-4_all.deb ...\r\nUnpacking
+  │   readline-common (8.3-4) ...\r\nSelecting previously unselected package libreadline8t64:amd64.\r\nPreparing to unpack
+  │   .../06-libreadline8t64_8.3-4_amd64.deb ...\r\nAdding 'diversion of /lib/x86_64-linux-gnu/libhistory.so.8 to
+  │   /lib/x86_64-linux-gnu/libhistory.so.8.usr-is-merged by libreadline8t64'\r\nAdding 'diversion of /lib/x86_64-linux-gnu/libhistory.so.8.2
+  │   to /lib/x86_64-linux-gnu/libhistory.so.8.2.usr-is-merged by libreadline8t64'\r\nAdding 'diversion of
+  │   /lib/x86_64-linux-gnu/libreadline.so.8 to /lib/x86_64-linux-gnu/libreadline.so.8.usr-is-merged by libreadline8t64'\r\nAdding 'diversion
+  │   of /lib/x86_64-linux-gnu/libreadline.so.8.2 to /lib/x86_64-linux-gnu/libreadline.so.8.2.usr-is-merged by libreadline8t64'\r\nUnpacking
+  │   libreadline8t64:amd64 (8.3-4) ...\r\nSelecting previously unselected package libsqlite3-0:amd64.\r\nPreparing to unpack
+  │   .../07-libsqlite3-0_3.46.1-9ubuntu0.2_amd64.deb ...\r\nUnpacking libsqlite3-0:amd64 (3.46.1-9ubuntu0.2) ...\r\nSelecting previously
+  │   unselected package libpython3.14-stdlib:amd64.\r\nPreparing to unpack .../08-libpython3.14-stdlib_3.14.4-1ubuntu0.1_amd64.deb
+  │   ...\r\nUnpacking libpython3.14-stdlib:amd64 (3.14.4-1ubuntu0.1) ...\r\nSelecting previously unselected package python3.14.\r\nPreparing
+  │   to unpack .../09-python3.14_3.14.4-1ubuntu0.1_amd64.deb ...\r\nUnpacking python3.14 (3.14.4-1ubuntu0.1) ...\r\nSelecting previously
+  │   unselected package libpython3-stdlib:amd64.\r\nPreparing to unpack .../10-libpython3-stdlib_3.14.3-0ubuntu2_amd64.deb ...\r\nUnpacking
+  │   libpython3-stdlib:amd64 (3.14.3-0ubuntu2) ...\r\nSetting up python3-minimal (3.14.3-0ubuntu2) ...\r\nSelecting previously unselected
+  │   package python3.\r\n(Reading database ... \r(Reading database ... 5%\r(Reading database ... 10%\r(Reading database ... 15%\r(Reading
+  │   database ... 20%\r(Reading database ... 25%\r(Reading database ... 30%\r(Reading database ... 35%\r(Reading database ... 40%\r(Reading
+  │   database ... 45%\r(Reading database ... 50%\r(Reading database ... 55%\r(Reading database ... 60%\r(Reading database ... 65%\r(Reading
+  │   database ... 70%\r(Reading database ... 75%\r(Reading database ... 80%\r(Reading database ... 85%\r(Reading database ... 90%\r(Reading
+  │   database ... 95%\r(Reading database ... 100%\r(Reading database ... 9109 files and directories currently installed.)\r\nPreparing to
+  │   unpack .../python3_3.14.3-0ubuntu2_amd64.deb ...\r\nUnpacking python3 (3.14.3-0ubuntu2) ...\r\nSelecting previously unselected package
+  │   sudo-common.\r\nPreparing to unpack .../sudo-common_1.2ubuntu_all.deb ...\r\nUnpacking sudo-common (1.2ubuntu) ...\r\nSelecting
+  │   previously unselected package libapparmor1:amd64.\r\nPreparing to unpack .../libapparmor1_5.0.0~beta1-0ubuntu7_amd64.deb ...\r\nUnpacking
+  │   libapparmor1:amd64 (5.0.0~beta1-0ubuntu7) ...\r\nSetting up sudo-common (1.2ubuntu) ...\r\nSelecting previously unselected package
+  │   sudo.\r\n(Reading database ... \r(Reading database ... 5%\r(Reading database ... 10%\r(Reading database ... 15%\r(Reading database ...
+  │   20%\r(Reading database ... 25%\r(Reading database ... 30%\r(Reading database ... 35%\r(Reading database ... 40%\r(Reading database ...
+  │   45%\r(Reading database ... 50%\r(Reading database ... 55%\r(Reading database ... 60%\r(Reading database ... 65%\r(Reading database ...
+  │   70%\r(Reading database ... 75%\r(Reading database ... 80%\r(Reading database ... 85%\r(Reading database ... 90%\r(Reading database ...
+  │   95%\r(Reading database ... 100%\r(Reading database ... 9150 files and directories currently installed.)\r\nPreparing to unpack
+  │   .../sudo_1.9.17p2-1ubuntu3_amd64.deb ...\r\nUnpacking sudo (1.9.17p2-1ubuntu3) ...\r\nSelecting previously unselected package
+  │   openssl.\r\nPreparing to unpack .../openssl_3.5.5-1ubuntu3.3_amd64.deb ...\r\nUnpacking openssl (3.5.5-1ubuntu3.3) ...\r\nSelecting
+  │   previously unselected package ca-certificates.\r\nPreparing to unpack .../ca-certificates_20260601~26.04.1_all.deb ...\r\nUnpacking
+  │   ca-certificates (20260601~26.04.1) ...\r\nSelecting previously unselected package sudo-rs.\r\nPreparing to unpack
+  │   .../sudo-rs_0.2.13-0ubuntu1_amd64.deb ...\r\nUnpacking sudo-rs (0.2.13-0ubuntu1) ...\r\nSetting up media-types (14.0.0build1)
+  │   ...\r\nSetting up libapparmor1:amd64 (5.0.0~beta1-0ubuntu7) ...\r\nSetting up libsqlite3-0:amd64 (3.46.1-9ubuntu0.2) ...\r\nSetting up
+  │   tzdata (2026c-0ubuntu0.26.04.1) ...\r\ndebconf: unable to initialize frontend: Dialog\r\ndebconf: (TERM is not set, so the dialog
+  │   frontend is not usable.)\r\ndebconf: falling back to frontend: Readline\r\ndebconf: unable to initialize frontend: Readline\r\ndebconf:
+  │   (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl
+  │   /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5
+  │   /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at
+  │   /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8.)\r\ndebconf: falling back to frontend: Teletype\r\ndebconf: unable to initialize
+  │   frontend: Teletype\r\ndebconf: (This frontend requires a controlling tty.)\r\ndebconf: falling back to frontend:
+  │   Noninteractive\r\n\r\nCurrent default time zone: 'Etc/UTC'\r\nLocal time is now:      Sun Aug  2 21:38:50 UTC 2026.\r\nUniversal Time is
+  │   now:  Sun Aug  2 21:38:50 UTC 2026.\r\nRun 'dpkg-reconfigure tzdata' if you wish to change it.\r\n\r\nSetting up sudo (1.9.17p2-1ubuntu3)
+  │   ...\r\nupdate-alternatives: using /usr/bin/sudo.ws to provide /usr/bin/sudo (sudo) in auto mode\r\nupdate-alternatives: warning: skip
+  │   creation of /usr/share/man/man8/sudo.8.gz because associated file /usr/share/man/man8/sudo.ws.8.gz (of link group sudo) does not
+  │   exist\r\nupdate-alternatives: warning: skip creation of /usr/share/man/man8/sudoedit.8.gz because associated file
+  │   /usr/share/man/man8/sudo.ws.8.gz (of link group sudo) does not exist\r\nupdate-alternatives: warning: skip creation of
+  │   /usr/share/man/man5/sudoers.5.gz because associated file /usr/share/man/man5/sudoers.ws.5.gz (of link group sudo) does not
+  │   exist\r\nupdate-alternatives: warning: skip creation of /usr/share/man/man8/visudo.8.gz because associated file
+  │   /usr/share/man/man8/visudo.ws.8.gz (of link group sudo) does not exist\r\nSetting up libffi8:amd64 (3.5.2-4) ...\r\nSetting up netbase
+  │   (6.5build1) ...\r\nSetting up openssl (3.5.5-1ubuntu3.3) ...\r\nSetting up readline-common (8.3-4) ...\r\nSetting up ca-certificates
+  │   (20260601~26.04.1) ...\r\ndebconf: unable to initialize frontend: Dialog\r\ndebconf: (TERM is not set, so the dialog frontend is not
+  │   usable.)\r\ndebconf: falling back to frontend: Readline\r\ndebconf: unable to initialize frontend: Readline\r\ndebconf: (Can't locate
+  │   Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl
+  │   /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5
+  │   /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at
+  │   /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8.)\r\ndebconf: falling back to frontend: Teletype\r\ndebconf: unable to initialize
+  │   frontend: Teletype\r\ndebconf: (This frontend requires a controlling tty.)\r\ndebconf: falling back to frontend:
+  │   Noninteractive\r\nUpdating certificates in /etc/ssl/certs...\r\n121 added, 0 removed; done.\r\nSetting up libreadline8t64:amd64 (8.3-4)
+  │   ...\r\nSetting up libpython3.14-stdlib:amd64 (3.14.4-1ubuntu0.1) ...\r\nSetting up python3.14 (3.14.4-1ubuntu0.1) ...\r\nSetting up
+  │   libpython3-stdlib:amd64 (3.14.3-0ubuntu2) ...\r\nSetting up python3 (3.14.3-0ubuntu2) ...\r\nrunning python rtupdate hooks for
+  │   python3.14...\r\nrunning python post-rtupdate hooks for python3.14...\r\nSetting up sudo-rs (0.2.13-0ubuntu1) ...\r\nupdate-alternatives:
+  │   using /usr/lib/cargo/bin/sudo to provide /usr/bin/sudo (sudo) in auto mode\r\nupdate-alternatives: warning: skip creation of
+  │   /usr/share/man/man8/sudo.8.gz because associated file /usr/share/man/man8/sudo-rs.8.gz (of link group sudo) does not
+  │   exist\r\nupdate-alternatives: warning: skip creation of /usr/share/man/man8/sudoedit.8.gz because associated file
+  │   /usr/share/man/man8/sudo-rs.8.gz (of link group sudo) does not exist\r\nupdate-alternatives: warning: skip creation of
+  │   /usr/share/man/man5/sudoers.5.gz because associated file /usr/share/man/man5/sudoers-rs.5.gz (of link group sudo) does not
+  │   exist\r\nupdate-alternatives: warning: skip creation of /usr/share/man/man8/visudo.8.gz because associated file
+  │   /usr/share/man/man8/visudo-rs.8.gz (of link group sudo) does not exist\r\nProcessing triggers for libc-bin (2.43-2ubuntu2)
+  │   ...\r\nProcessing triggers for ca-certificates (20260601~26.04.1) ...\r\nUpdating certificates in /etc/ssl/certs...\r\n0 added, 0
+  │   removed; done.\r\nRunning hooks in /etc/ca-certificates/update.d...\r\ndone.\r\n", "stdout_lines": ["Reading package lists...", "Building
+  │   dependency tree...", "Reading state information...", "Solving dependencies...", "The following additional packages will be installed:", "
+  │   ca-certificates libapparmor1 libexpat1 libffi8 libpython3-stdlib", "  libpython3.14-minimal libpython3.14-stdlib libreadline8t64
+  │   libsqlite3-0", "  media-types netbase openssl python3-minimal python3.14 python3.14-minimal", "  readline-common sudo-common sudo-rs
+  │   tzdata", "Suggested packages:", "  python3-doc python3-tk python3-venv python3.14-venv python3.14-doc binutils", "  binfmt-support
+  │   readline-doc", "The following NEW packages will be installed:", "  ca-certificates libapparmor1 libexpat1 libffi8 libpython3-stdlib", " 
+  │   libpython3.14-minimal libpython3.14-stdlib libreadline8t64 libsqlite3-0", "  media-types netbase openssl python3 python3-minimal
+  │   python3.14", "  python3.14-minimal readline-common sudo sudo-common sudo-rs tzdata", "0 upgraded, 21 newly installed, 0 to remove and 10
+  │   not upgraded.", "Need to get 11.1 MB of archives.", "After this operation, 38.5 MB of additional disk space will be used.", "Get:1
+  │   http://archive.ubuntu.com/ubuntu resolute/main amd64 libexpat1 amd64 2.7.4-1 [94.0 kB]", "Get:2 http://archive.ubuntu.com/ubuntu
+  │   resolute-updates/main amd64 libpython3.14-minimal amd64 3.14.4-1ubuntu0.1 [916 kB]", "Get:3 http://archive.ubuntu.com/ubuntu
+  │   resolute-updates/main amd64 python3.14-minimal amd64 3.14.4-1ubuntu0.1 [2580 kB]", "Get:4 http://archive.ubuntu.com/ubuntu resolute/main
+  │   amd64 python3-minimal amd64 3.14.3-0ubuntu2 [25.8 kB]", "Get:5 http://archive.ubuntu.com/ubuntu resolute/main amd64 media-types all
+  │   14.0.0build1 [31.4 kB]", "Get:6 http://archive.ubuntu.com/ubuntu resolute/main amd64 netbase all 6.5build1 [13.0 kB]", "Get:7
+  │   http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 tzdata all 2026c-0ubuntu0.26.04.1 [193 kB]", "Get:8
+  │   http://archive.ubuntu.com/ubuntu resolute/main amd64 libffi8 amd64 3.5.2-4 [26.3 kB]", "Get:9 http://archive.ubuntu.com/ubuntu
+  │   resolute/main amd64 readline-common all 8.3-4 [61.5 kB]", "Get:10 http://archive.ubuntu.com/ubuntu resolute/main amd64 libreadline8t64
+  │   amd64 8.3-4 [164 kB]", "Get:11 http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 libsqlite3-0 amd64 3.46.1-9ubuntu0.2 [719
+  │   kB]", "Get:12 http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 libpython3.14-stdlib amd64 3.14.4-1ubuntu0.1 [2414 kB]",
+  │   "Get:13 http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 python3.14 amd64 3.14.4-1ubuntu0.1 [830 kB]", "Get:14
+  │   http://archive.ubuntu.com/ubuntu resolute/main amd64 libpython3-stdlib amd64 3.14.3-0ubuntu2 [8476 B]", "Get:15
+  │   http://archive.ubuntu.com/ubuntu resolute/main amd64 python3 amd64 3.14.3-0ubuntu2 [22.9 kB]", "Get:16 http://archive.ubuntu.com/ubuntu
+  │   resolute/main amd64 sudo-common all 1.2ubuntu [4034 B]", "Get:17 http://archive.ubuntu.com/ubuntu resolute/main amd64 libapparmor1 amd64
+  │   5.0.0~beta1-0ubuntu7 [50.5 kB]", "Get:18 http://archive.ubuntu.com/ubuntu resolute/main amd64 sudo amd64 1.9.17p2-1ubuntu3 [954 kB]",
+  │   "Get:19 http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 openssl amd64 3.5.5-1ubuntu3.3 [1243 kB]", "Get:20
+  │   http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 ca-certificates all 20260601~26.04.1 [139 kB]", "Get:21
+  │   http://archive.ubuntu.com/ubuntu resolute/main amd64 sudo-rs amd64 0.2.13-0ubuntu1 [592 kB]", "Preconfiguring packages ...", "Fetched
+  │   11.1 MB in 1s (9992 kB/s)", "Selecting previously unselected package libexpat1:amd64.", "(Reading database ... ", "(Reading database ...
+  │   5%", "(Reading database ... 10%", "(Reading database ... 15%", "(Reading database ... 20%", "(Reading database ... 25%", "(Reading
+  │   database ... 30%", "(Reading database ... 35%", "(Reading database ... 40%", "(Reading database ... 45%", "(Reading database ... 50%",
+  │   "(Reading database ... 55%", "(Reading database ... 60%", "(Reading database ... 65%", "(Reading database ... 70%", "(Reading database
+  │   ... 75%", "(Reading database ... 80%", "(Reading database ... 85%", "(Reading database ... 90%", "(Reading database ... 95%", "(Reading
+  │   database ... 100%", "(Reading database ... 7724 files and directories currently installed.)", "Preparing to unpack
+  │   .../libexpat1_2.7.4-1_amd64.deb ...", "Unpacking libexpat1:amd64 (2.7.4-1) ...", "Selecting previously unselected package
+  │   libpython3.14-minimal:amd64.", "Preparing to unpack .../libpython3.14-minimal_3.14.4-1ubuntu0.1_amd64.deb ...", "Unpacking
+  │   libpython3.14-minimal:amd64 (3.14.4-1ubuntu0.1) ...", "Selecting previously unselected package python3.14-minimal.", "Preparing to unpack
+  │   .../python3.14-minimal_3.14.4-1ubuntu0.1_amd64.deb ...", "Unpacking python3.14-minimal (3.14.4-1ubuntu0.1) ...", "Setting up
+  │   libpython3.14-minimal:amd64 (3.14.4-1ubuntu0.1) ...", "Setting up libexpat1:amd64 (2.7.4-1) ...", "Setting up python3.14-minimal
+  │   (3.14.4-1ubuntu0.1) ...", "Selecting previously unselected package python3-minimal.", "(Reading database ... ", "(Reading database ...
+  │   5%", "(Reading database ... 10%", "(Reading database ... 15%", "(Reading database ... 20%", "(Reading database ... 25%", "(Reading
+  │   database ... 30%", "(Reading database ... 35%", "(Reading database ... 40%", "(Reading database ... 45%", "(Reading database ... 50%",
+  │   "(Reading database ... 55%", "(Reading database ... 60%", "(Reading database ... 65%", "(Reading database ... 70%", "(Reading database
+  │   ... 75%", "(Reading database ... 80%", "(Reading database ... 85%", "(Reading database ... 90%", "(Reading database ... 95%", "(Reading
+  │   database ... 100%", "(Reading database ... 8078 files and directories currently installed.)", "Preparing to unpack
+  │   .../00-python3-minimal_3.14.3-0ubuntu2_amd64.deb ...", "Unpacking python3-minimal (3.14.3-0ubuntu2) ...", "Selecting previously
+  │   unselected package media-types.", "Preparing to unpack .../01-media-types_14.0.0build1_all.deb ...", "Unpacking media-types
+  │   (14.0.0build1) ...", "Selecting previously unselected package netbase.", "Preparing to unpack .../02-netbase_6.5build1_all.deb ...",
+  │   "Unpacking netbase (6.5build1) ...", "Selecting previously unselected package tzdata.", "Preparing to unpack
+  │   .../03-tzdata_2026c-0ubuntu0.26.04.1_all.deb ...", "Unpacking tzdata (2026c-0ubuntu0.26.04.1) ...", "Selecting previously unselected
+  │   package libffi8:amd64.", "Preparing to unpack .../04-libffi8_3.5.2-4_amd64.deb ...", "Unpacking libffi8:amd64 (3.5.2-4) ...", "Selecting
+  │   previously unselected package readline-common.", "Preparing to unpack .../05-readline-common_8.3-4_all.deb ...", "Unpacking
+  │   readline-common (8.3-4) ...", "Selecting previously unselected package libreadline8t64:amd64.", "Preparing to unpack
+  │   .../06-libreadline8t64_8.3-4_amd64.deb ...", "Adding 'diversion of /lib/x86_64-linux-gnu/libhistory.so.8 to
+  │   /lib/x86_64-linux-gnu/libhistory.so.8.usr-is-merged by libreadline8t64'", "Adding 'diversion of /lib/x86_64-linux-gnu/libhistory.so.8.2
+  │   to /lib/x86_64-linux-gnu/libhistory.so.8.2.usr-is-merged by libreadline8t64'", "Adding 'diversion of
+  │   /lib/x86_64-linux-gnu/libreadline.so.8 to /lib/x86_64-linux-gnu/libreadline.so.8.usr-is-merged by libreadline8t64'", "Adding 'diversion
+  │   of /lib/x86_64-linux-gnu/libreadline.so.8.2 to /lib/x86_64-linux-gnu/libreadline.so.8.2.usr-is-merged by libreadline8t64'", "Unpacking
+  │   libreadline8t64:amd64 (8.3-4) ...", "Selecting previously unselected package libsqlite3-0:amd64.", "Preparing to unpack
+  │   .../07-libsqlite3-0_3.46.1-9ubuntu0.2_amd64.deb ...", "Unpacking libsqlite3-0:amd64 (3.46.1-9ubuntu0.2) ...", "Selecting previously
+  │   unselected package libpython3.14-stdlib:amd64.", "Preparing to unpack .../08-libpython3.14-stdlib_3.14.4-1ubuntu0.1_amd64.deb ...",
+  │   "Unpacking libpython3.14-stdlib:amd64 (3.14.4-1ubuntu0.1) ...", "Selecting previously unselected package python3.14.", "Preparing to
+  │   unpack .../09-python3.14_3.14.4-1ubuntu0.1_amd64.deb ...", "Unpacking python3.14 (3.14.4-1ubuntu0.1) ...", "Selecting previously
+  │   unselected package libpython3-stdlib:amd64.", "Preparing to unpack .../10-libpython3-stdlib_3.14.3-0ubuntu2_amd64.deb ...", "Unpacking
+  │   libpython3-stdlib:amd64 (3.14.3-0ubuntu2) ...", "Setting up python3-minimal (3.14.3-0ubuntu2) ...", "Selecting previously unselected
+  │   package python3.", "(Reading database ... ", "(Reading database ... 5%", "(Reading database ... 10%", "(Reading database ... 15%",
+  │   "(Reading database ... 20%", "(Reading database ... 25%", "(Reading database ... 30%", "(Reading database ... 35%", "(Reading database
+  │   ... 40%", "(Reading database ... 45%", "(Reading database ... 50%", "(Reading database ... 55%", "(Reading database ... 60%", "(Reading
+  │   database ... 65%", "(Reading database ... 70%", "(Reading database ... 75%", "(Reading database ... 80%", "(Reading database ... 85%",
+  │   "(Reading database ... 90%", "(Reading database ... 95%", "(Reading database ... 100%", "(Reading database ... 9109 files and directories
+  │   currently installed.)", "Preparing to unpack .../python3_3.14.3-0ubuntu2_amd64.deb ...", "Unpacking python3 (3.14.3-0ubuntu2) ...",
+  │   "Selecting previously unselected package sudo-common.", "Preparing to unpack .../sudo-common_1.2ubuntu_all.deb ...", "Unpacking
+  │   sudo-common (1.2ubuntu) ...", "Selecting previously unselected package libapparmor1:amd64.", "Preparing to unpack
+  │   .../libapparmor1_5.0.0~beta1-0ubuntu7_amd64.deb ...", "Unpacking libapparmor1:amd64 (5.0.0~beta1-0ubuntu7) ...", "Setting up sudo-common
+  │   (1.2ubuntu) ...", "Selecting previously unselected package sudo.", "(Reading database ... ", "(Reading database ... 5%", "(Reading
+  │   database ... 10%", "(Reading database ... 15%", "(Reading database ... 20%", "(Reading database ... 25%", "(Reading database ... 30%",
+  │   "(Reading database ... 35%", "(Reading database ... 40%", "(Reading database ... 45%", "(Reading database ... 50%", "(Reading database
+  │   ... 55%", "(Reading database ... 60%", "(Reading database ... 65%", "(Reading database ... 70%", "(Reading database ... 75%", "(Reading
+  │   database ... 80%", "(Reading database ... 85%", "(Reading database ... 90%", "(Reading database ... 95%", "(Reading database ... 100%",
+  │   "(Reading database ... 9150 files and directories currently installed.)", "Preparing to unpack .../sudo_1.9.17p2-1ubuntu3_amd64.deb ...",
+  │   "Unpacking sudo (1.9.17p2-1ubuntu3) ...", "Selecting previously unselected package openssl.", "Preparing to unpack
+  │   .../openssl_3.5.5-1ubuntu3.3_amd64.deb ...", "Unpacking openssl (3.5.5-1ubuntu3.3) ...", "Selecting previously unselected package
+  │   ca-certificates.", "Preparing to unpack .../ca-certificates_20260601~26.04.1_all.deb ...", "Unpacking ca-certificates (20260601~26.04.1)
+  │   ...", "Selecting previously unselected package sudo-rs.", "Preparing to unpack .../sudo-rs_0.2.13-0ubuntu1_amd64.deb ...", "Unpacking
+  │   sudo-rs (0.2.13-0ubuntu1) ...", "Setting up media-types (14.0.0build1) ...", "Setting up libapparmor1:amd64 (5.0.0~beta1-0ubuntu7) ...",
+  │   "Setting up libsqlite3-0:amd64 (3.46.1-9ubuntu0.2) ...", "Setting up tzdata (2026c-0ubuntu0.26.04.1) ...", "debconf: unable to initialize
+  │   frontend: Dialog", "debconf: (TERM is not set, so the dialog frontend is not usable.)", "debconf: falling back to frontend: Readline",
+  │   "debconf: unable to initialize frontend: Readline", "debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the
+  │   Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1
+  │   /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40
+  │   /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8.)", "debconf: falling back to
+  │   frontend: Teletype", "debconf: unable to initialize frontend: Teletype", "debconf: (This frontend requires a controlling tty.)",
+  │   "debconf: falling back to frontend: Noninteractive", "", "Current default time zone: 'Etc/UTC'", "Local time is now:      Sun Aug  2
+  │   21:38:50 UTC 2026.", "Universal Time is now:  Sun Aug  2 21:38:50 UTC 2026.", "Run 'dpkg-reconfigure tzdata' if you wish to change it.",
+  │   "", "Setting up sudo (1.9.17p2-1ubuntu3) ...", "update-alternatives: using /usr/bin/sudo.ws to provide /usr/bin/sudo (sudo) in auto
+  │   mode", "update-alternatives: warning: skip creation of /usr/share/man/man8/sudo.8.gz because associated file
+  │   /usr/share/man/man8/sudo.ws.8.gz (of link group sudo) does not exist", "update-alternatives: warning: skip creation of
+  │   /usr/share/man/man8/sudoedit.8.gz because associated file /usr/share/man/man8/sudo.ws.8.gz (of link group sudo) does not exist",
+  │   "update-alternatives: warning: skip creation of /usr/share/man/man5/sudoers.5.gz because associated file
+  │   /usr/share/man/man5/sudoers.ws.5.gz (of link group sudo) does not exist", "update-alternatives: warning: skip creation of
+  │   /usr/share/man/man8/visudo.8.gz because associated file /usr/share/man/man8/visudo.ws.8.gz (of link group sudo) does not exist", "Setting
+  │   up libffi8:amd64 (3.5.2-4) ...", "Setting up netbase (6.5build1) ...", "Setting up openssl (3.5.5-1ubuntu3.3) ...", "Setting up
+  │   readline-common (8.3-4) ...", "Setting up ca-certificates (20260601~26.04.1) ...", "debconf: unable to initialize frontend: Dialog",
+  │   "debconf: (TERM is not set, so the dialog frontend is not usable.)", "debconf: falling back to frontend: Readline", "debconf: unable to
+  │   initialize frontend: Readline", "debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module)
+  │   (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1
+  │   /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40
+  │   /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8.)", "debconf: falling back to
+  │   frontend: Teletype", "debconf: unable to initialize frontend: Teletype", "debconf: (This frontend requires a controlling tty.)",
+  │   "debconf: falling back to frontend: Noninteractive", "Updating certificates in /etc/ssl/certs...", "121 added, 0 removed; done.",
+  │   "Setting up libreadline8t64:amd64 (8.3-4) ...", "Setting up libpython3.14-stdlib:amd64 (3.14.4-1ubuntu0.1) ...", "Setting up python3.14
+  │   (3.14.4-1ubuntu0.1) ...", "Setting up libpython3-stdlib:amd64 (3.14.3-0ubuntu2) ...", "Setting up python3 (3.14.3-0ubuntu2) ...",
+  │   "running python rtupdate hooks for python3.14...", "running python post-rtupdate hooks for python3.14...", "Setting up sudo-rs
+  │   (0.2.13-0ubuntu1) ...", "update-alternatives: using /usr/lib/cargo/bin/sudo to provide /usr/bin/sudo (sudo) in auto mode",
+  │   "update-alternatives: warning: skip creation of /usr/share/man/man8/sudo.8.gz because associated file /usr/share/man/man8/sudo-rs.8.gz
+  │   (of link group sudo) does not exist", "update-alternatives: warning: skip creation of /usr/share/man/man8/sudoedit.8.gz because
+  │   associated file /usr/share/man/man8/sudo-rs.8.gz (of link group sudo) does not exist", "update-alternatives: warning: skip creation of
+  │   /usr/share/man/man5/sudoers.5.gz because associated file /usr/share/man/man5/sudoers-rs.5.gz (of link group sudo) does not exist",
+  │   "update-alternatives: warning: skip creation of /usr/share/man/man8/visudo.8.gz because associated file
+  │   /usr/share/man/man8/visudo-rs.8.gz (of link group sudo) does not exist", "Processing triggers for libc-bin (2.43-2ubuntu2) ...",
+  │   "Processing triggers for ca-certificates (20260601~26.04.1) ...", "Updating certificates in /etc/ssl/certs...", "0 added, 0 removed;
+  │   done.", "Running hooks in /etc/ca-certificates/update.d...", "done."]}
+  │ 
+  │ TASK [Gather facts] ************************************************************
+  │ ok: [instance]
+  │ 
+  │ TASK [Install Vector] **********************************************************
+  │ changed: [instance] => {"changed": true, "stderr": "", "stderr_lines": [], "stdout": "Selecting previously unselected package
+  │   vector.\n(Reading database ... 11254 files and directories currently installed.)\nPreparing to unpack
+  │   .../vector_0.31.0-1_amd64gb6nrr50.deb ...\nUnpacking vector (0.31.0-1) ...\nSetting up vector (0.31.0-1) ...\n", "stdout_lines":
+  │   ["Selecting previously unselected package vector.", "(Reading database ... 11254 files and directories currently installed.)", "Preparing
+  │   to unpack .../vector_0.31.0-1_amd64gb6nrr50.deb ...", "Unpacking vector (0.31.0-1) ...", "Setting up vector (0.31.0-1) ..."]}
+  │ 
+  │ PLAY RECAP *********************************************************************
+  │ instance                   : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+  │ 
+  └─ Return code: 0 ─────────────────────────────────────────────────────────────────
+INFO     compatibility ➜ converge: Executed: Successful
+INFO     compatibility ➜ verify: Executing
+  ┌──────────────────────────────────────────────────────────────────────────────────
+  │ ansible-playbook --inventory /home/geolook/.ansible/tmp/molecule.9bzX.compatibility/inventory
+  │   --skip-tags molecule-notest,notest
+  │   /home/geolook/netology/homeworks/task3/vector-role/molecule/compatibility/verify.yml
+  │ 
+  │ Using /home/geolook/.ansible/tmp/molecule.9bzX.compatibility/ansible.cfg as config file
+  │ 
+  │ PLAY [Verify] ******************************************************************
+  │ 
+  │ TASK [Check Vector version] ****************************************************
+  │ ok: [instance] => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3.14"}, "changed": false, "changed_when_result":
+  │   false, "cmd": ["vector", "--version"], "delta": "0:00:00.007771", "end": "2026-08-02 21:39:09.429663", "failed_when_result": false,
+  │   "msg": "", "rc": 0, "start": "2026-08-02 21:39:09.421892", "stderr": "", "stderr_lines": [], "stdout": "vector 0.31.0
+  │   (x86_64-unknown-linux-gnu 0f13b22 2023-07-06 13:52:34.591204470)", "stdout_lines": ["vector 0.31.0 (x86_64-unknown-linux-gnu 0f13b22
+  │   2023-07-06 13:52:34.591204470)"]}
+  │ 
+  │ TASK [Print version] ***********************************************************
+  │ ok: [instance] => {
+  │     "msg": "Vector version: vector 0.31.0 (x86_64-unknown-linux-gnu 0f13b22 2023-07-06 13:52:34.591204470)"
+  │ }
+  │ 
+  │ PLAY RECAP *********************************************************************
+  │ instance                   : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+  │ 
+  └─ Return code: 0 ─────────────────────────────────────────────────────────────────
+INFO     compatibility ➜ verify: Executed: Successful
+INFO     compatibility ➜ destroy: Executing
+  ┌──────────────────────────────────────────────────────────────────────────────────
+  │ ansible-playbook --inventory /home/geolook/.ansible/tmp/molecule.9bzX.compatibility/inventory
+  │   --skip-tags molecule-notest,notest
+  │   /home/geolook/netology/homeworks/task3/venv/lib/python3.12/site-packages/molecule_podman/playbooks/destroy.yml
+  │ 
+  │ Using /home/geolook/.ansible/tmp/molecule.9bzX.compatibility/ansible.cfg as config file
+  │ 
+  │ PLAY [Destroy] *****************************************************************
+  │ 
+  │ TASK [Set async_dir for HOME env] **********************************************
+  │ ok: [localhost] => {"ansible_facts": {"ansible_async_dir": "/home/geolook/.ansible_async/"}, "changed": false}
+  │ 
+  │ TASK [Destroy molecule instance(s)] ********************************************
+  │ changed: [localhost] => (item={'image': 'ubuntu:latest', 'name': 'instance', 'pre_build_image': True}) => {"ansible_job_id":
+  │   "j876353636943.889324", "ansible_loop_var": "item", "changed": true, "changed_when_result": true, "finished": false, "item": {"image":
+  │   "ubuntu:latest", "name": "instance", "pre_build_image": true}, "results_file": "/home/geolook/.ansible_async/j876353636943.889324",
+  │   "started": true}
+  │ 
+  │ TASK [Wait for instance(s) deletion to complete] *******************************
+  │ FAILED - RETRYING: [localhost]: Wait for instance(s) deletion to complete (299 retries left).
+  │ FAILED - RETRYING: [localhost]: Wait for instance(s) deletion to complete (298 retries left).
+  │ FAILED - RETRYING: [localhost]: Wait for instance(s) deletion to complete (297 retries left).
+  │ changed: [localhost] => (item={'changed': True, 'failed': False, 'finished': False, 'ansible_job_id': 'j876353636943.889324',
+  │   'changed_when_result': True, 'ansible_loop_var': 'item', 'item': {'image': 'ubuntu:latest', 'name': 'instance', 'pre_build_image': True},
+  │   'started': True, 'results_file': '/home/geolook/.ansible_async/j876353636943.889324'}) => {"ansible_job_id": "j876353636943.889324",
+  │   "ansible_loop_var": "item", "attempts": 4, "changed": true, "cmd": "podman container exists instance && podman rm -f instance || true",
+  │   "delta": "0:00:10.607592", "end": "2026-08-03 00:39:21.687980", "finished": true, "item": {"ansible_job_id": "j876353636943.889324",
+  │   "ansible_loop_var": "item", "changed": true, "changed_when_result": true, "failed": false, "finished": false, "item": {"image":
+  │   "ubuntu:latest", "name": "instance", "pre_build_image": true}, "results_file": "/home/geolook/.ansible_async/j876353636943.889324",
+  │   "started": true}, "msg": "", "rc": 0, "results_file": "/home/geolook/.ansible_async/j876353636943.889324", "start": "2026-08-03
+  │   00:39:11.080388", "started": true, "stderr": "time=\"2026-08-03T00:39:21+03:00\" level=warning msg=\"StopSignal SIGTERM failed to stop
+  │   container instance in 10 seconds, resorting to SIGKILL\"", "stderr_lines": ["time=\"2026-08-03T00:39:21+03:00\" level=warning
+  │   msg=\"StopSignal SIGTERM failed to stop container instance in 10 seconds, resorting to SIGKILL\""], "stdout": "instance", "stdout_lines":
+  │   ["instance"]}
+  │ 
+  │ PLAY RECAP *********************************************************************
+  │ localhost                  : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+  │ 
+  └─ Return code: 0 ─────────────────────────────────────────────────────────────────
+INFO     compatibility ➜ destroy: Executed: Successful
+INFO     compatibility ➜ scenario: Pruning extra files from scenario ephemeral directory
+INFO     Molecule executed 1 scenario (1 successful)
+
+DETAILS                                                                        
+compatibility ➜ destroy: Executed: Successful
+compatibility ➜ syntax: Executed: Successful
+compatibility ➜ create: Executed: Successful
+compatibility ➜ converge: Executed: Successful
+compatibility ➜ verify: Executed: Successful
+compatibility ➜ destroy: Executed: Successful
+
+SCENARIO RECAP                                                                 
+compatibility             : actions=6  successful=6  disabled=0  skipped=0  missing=0  failed=0
+
+(venv) ➜  vector-role git:(task3) ✗ 

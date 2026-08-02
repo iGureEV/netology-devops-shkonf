@@ -1,0 +1,22 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: false
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+    - name: Update apt cache
+      raw: apt-get update
+      changed_when: false
+
+    - name: Install python3
+      raw: apt-get install -y python3 sudo
+      changed_when: false
+
+    - name: Gather facts
+      ansible.builtin.setup:
+
+    - name: Install Vector
+      ansible.builtin.apt:
+        deb: https://github.com/vectordotdev/vector/releases/download/v0.31.0/vector_0.31.0-1_amd64.deb
+      become: true

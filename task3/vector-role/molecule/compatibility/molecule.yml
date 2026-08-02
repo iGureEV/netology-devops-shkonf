@@ -1,13 +1,10 @@
 ---
 driver:
-  name: docker
+  name: podman
 
 platforms:
-  - name: instance-ubuntu
+  - name: instance
     image: ubuntu:latest
-    pre_build_image: true
-  - name: instance-oraclelinux
-    image: oraclelinux:8
     pre_build_image: true
 
 provisioner:
@@ -22,7 +19,7 @@ verifier:
   name: ansible
 
 scenario:
-  name: default
+  name: compatibility
   test_sequence:
     - destroy
     - syntax

@@ -1,0 +1,7 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for roles/file_creator
+---
+file_path: "/tmp/role_default_test.txt"
+file_content: "Hello from role defaults!"
+

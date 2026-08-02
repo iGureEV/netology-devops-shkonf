@@ -1,0 +1,10 @@
+---
+- name: Destroy
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Destroy all containers
+      ansible.builtin.command: docker rm -f {{ item.name }}
+      loop: "{{ molecule_yml.platforms }}"
+      changed_when: false

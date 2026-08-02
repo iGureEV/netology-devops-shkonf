@@ -1,0 +1,32 @@
+---
+driver:
+  name: docker
+
+platforms:
+  - name: instance-ubuntu
+    image: ubuntu:latest
+    pre_build_image: true
+  - name: instance-oraclelinux
+    image: oraclelinux:8
+    pre_build_image: true
+
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      host_key_checking: false
+      verbosity: 1
+      role_name_check: 0
+
+verifier:
+  name: ansible
+
+scenario:
+  name: default
+  test_sequence:
+    - destroy
+    - syntax
+    - create
+    - converge
+    - verify
+    - destroy

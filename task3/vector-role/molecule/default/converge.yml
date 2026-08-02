@@ -1,0 +1,28 @@
+---
+- name: Converge
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Install curl and vector in Ubuntu
+      ansible.builtin.command:
+        cmd: |
+          docker exec instance-ubuntu bash -c '
+            apt-get update && apt-get install -y curl &&
+            curl -L https://github.com/vectordotdev/vector/releases/download/v0.31.0/vector_0.31.0-1_amd64.deb -o /tmp/vector.deb &&
+            dpkg -i /tmp/vector.deb
+          '
+      register: ubuntu_install
+      changed_when: ubuntu_install.rc == 0
+      failed_when: ubuntu_install.rc != 0
+
+    - name: Install curl and vector in Oracle Linux
+      ansible.builtin.command:
+        cmd: |
+          docker exec instance-oraclelinux bash -c '
+            yum install -y curl &&
+            curl -L https://github.com/vectordotdev/vector/releases/download/v0.31.0/vector-0.31.0-1.x86_64.rpm -o /tmp/vector.rpm &&
+            rpm -i /tmp/vector.rpm
+          '
+      register: oracle_install
+      changed_when: oracle_install.rc == 0
+      failed_when: oracle_install.rc != 0

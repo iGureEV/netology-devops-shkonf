@@ -1,0 +1,24 @@
+---
+- name: Verify
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Check vector version in Ubuntu
+      ansible.builtin.command: docker exec instance-ubuntu vector --version
+      register: ubuntu_vector
+      changed_when: false
+      failed_when: ubuntu_vector.rc != 0
+
+    - name: Print Ubuntu vector version
+      ansible.builtin.debug:
+        msg: "Ubuntu: {{ ubuntu_vector.stdout }}"
+
+    - name: Check vector version in Oracle Linux
+      ansible.builtin.command: docker exec instance-oraclelinux vector --version
+      register: oracle_vector
+      changed_when: false
+      failed_when: oracle_vector.rc != 0
+
+    - name: Print Oracle Linux vector version
+      ansible.builtin.debug:
+        msg: "Oracle Linux: {{ oracle_vector.stdout }}"

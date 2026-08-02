@@ -1,0 +1,36 @@
+---
+- name: Create
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Remove existing containers
+      ansible.builtin.command: docker rm -f {{ item.name }}
+      loop: "{{ molecule_yml.platforms }}"
+      changed_when: false
+
+    - name: Create Ubuntu container
+      ansible.builtin.command:
+        cmd: docker run -d --name instance-ubuntu --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:rw ubuntu:latest /bin/bash -c "while true; do sleep 3600; done"
+      when: "'ubuntu' in item.image"
+      loop: "{{ molecule_yml.platforms }}"
+      changed_when: false
+
+    - name: Create Oracle Linux container
+      ansible.builtin.command:
+        cmd: docker run -d --name instance-oraclelinux --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:rw oraclelinux:8 /sbin/init
+      when: "'oracle' in item.image"
+      loop: "{{ molecule_yml.platforms }}"
+      changed_when: false
+
+    - name: Wait for containers to start
+      ansible.builtin.pause:
+        seconds: 5
+
+    - name: Install python in Ubuntu
+      ansible.builtin.command: docker exec instance-ubuntu bash -c "apt-get update && apt-get install -y python3 sudo"
+      changed_when: false
+
+    - name: Install python in Oracle Linux
+      ansible.builtin.command: docker exec instance-oraclelinux bash -c "yum install -y python3 sudo"
+      changed_when: false

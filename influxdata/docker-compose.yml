@@ -1,0 +1,54 @@
+services:
+  influxdb:
+    image: influxdb:1.8-alpine
+    volumes:
+      - ./influxdb/data:/var/lib/influxdb:Z
+      - ./influxdb/config:/etc/influxdb:Z
+    ports:
+      - "8086:8086"
+      - "8082:8082"
+      - "8089:8089/udp"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+      start_period: 40s
+
+  telegraf:
+    image: telegraf:latest
+    user: "0:0"
+    entrypoint: ["/usr/bin/telegraf", "-config", "/etc/telegraf/telegraf.conf"]
+    volumes:
+      - ./telegraf:/etc/telegraf:Z
+      - /var/run/docker.sock:/var/run/docker.sock:Z
+    depends_on:
+      influxdb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  kapacitor:
+    image: kapacitor:1.5-alpine
+    volumes:
+      - ./kapacitor/data:/var/lib/kapacitor:Z
+      - ./kapacitor/config:/etc/kapacitor:Z
+    ports:
+      - "9092:9092"
+    depends_on:
+      - influxdb
+    restart: unless-stopped
+
+  chronograf:
+    image: chronograf:1.10-alpine
+    environment:
+      INFLUXDB_URL: http://influxdb:8086
+      KAPACITOR_URL: http://kapacitor:9092
+    volumes:
+      - ./chronograf/data:/var/lib/chronograf:Z
+    ports:
+      - "8888:8888"
+    depends_on:
+      - influxdb
+      - kapacitor
+    restart: unless-stopped

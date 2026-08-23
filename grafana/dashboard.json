@@ -66,13 +66,13 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_memory_MemTotal_bytes{job=\"node_exporter_metrics\"}",
+          "expr": "node_memory_MemTotal_bytes{job=\"nodeexporter\"}",
           "interval": "",
           "legendFormat": "Вся память",
           "refId": "A"
         },
         {
-          "expr": "node_memory_MemFree_bytes{job=\"node_exporter_metrics\"}",
+          "expr": "node_memory_MemFree_bytes{job=\"nodeexporter\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "Свободная память",
@@ -175,20 +175,20 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_load1{job=\"node_exporter_metrics\"}",
+          "expr": "node_load1{job=\"nodeexporter\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         },
         {
-          "expr": "node_load5{job=\"node_exporter_metrics\"}",
+          "expr": "node_load5{job=\"nodeexporter\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "",
           "refId": "B"
         },
         {
-          "expr": "node_load15{job=\"node_exporter_metrics\"}",
+          "expr": "node_load15{job=\"nodeexporter\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "",

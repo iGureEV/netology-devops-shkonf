@@ -1,0 +1,27 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # Сервис security
+  - job_name: 'security'
+    static_configs:
+      - targets: ['security:3000']
+    metrics_path: '/metrics'
+
+  # Сервис uploader
+  - job_name: 'uploader'
+    static_configs:
+      - targets: ['uploader:3000']
+    metrics_path: '/metrics'
+
+  # Сервис storage (MinIO)
+  - job_name: 'minio'
+    static_configs:
+      - targets: ['storage:9000']
+    metrics_path: '/minio/v2/metrics/cluster'
+    # В MinIO используется публичный доступ
+
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
